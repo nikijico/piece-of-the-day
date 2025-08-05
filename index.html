@@ -74,61 +74,6 @@
       100% { opacity: 1; }
     }
 
-    #dancer-container {
-      position: relative;
-      margin: 40px auto;
-      width: 120px;
-      height: 150px;
-      animation: bob 1s infinite ease-in-out;
-    }
-
-    @keyframes bob {
-      0%   { transform: translateY(0); }
-      50%  { transform: translateY(-5px); }
-      100% { transform: translateY(0); }
-    }
-
-    .note {
-      position: absolute;
-      font-size: 20px;
-      opacity: 0;
-      animation: floatNote 3s infinite;
-      color: #ffd700;
-    }
-
-    .note1 {
-      top: 0;
-      left: -20px;
-      animation-delay: 0s;
-    }
-
-    .note2 {
-      top: 10px;
-      left: 100px;
-      animation-delay: 1s;
-    }
-
-    .note3 {
-      top: 5px;
-      left: 20px;
-      animation-delay: 2s;
-    }
-
-    @keyframes floatNote {
-      0% {
-        opacity: 0;
-        transform: translateY(0) scale(1);
-      }
-      30% {
-        opacity: 1;
-        transform: translateY(-20px) scale(1.2);
-      }
-      100% {
-        opacity: 0;
-        transform: translateY(-40px) scale(1);
-      }
-    }
-
     #history {
       margin-top: 60px;
       max-width: 800px;
@@ -165,28 +110,6 @@
   <div id="countdown"></div>
   <div id="player"></div>
 
-  <!-- 🎶 Omino animato con note musicali -->
-  <div id="dancer-container">
-    <div class="note note1">🎵</div>
-    <div class="note note2">🎶</div>
-    <div class="note note3">🎵</div>
-
-    <svg id="dancer" viewBox="0 0 100 100" width="120" height="120">
-      <!-- Head with headphones -->
-      <circle cx="50" cy="20" r="10" fill="#ffd700" />
-      <rect x="38" y="13" width="4" height="14" fill="#666" />
-      <rect x="58" y="13" width="4" height="14" fill="#666" />
-      <!-- Body -->
-      <line x1="50" y1="30" x2="50" y2="60" stroke="#fff" stroke-width="4" />
-      <!-- Arms -->
-      <line x1="50" y1="35" x2="30" y2="20" stroke="#fff" stroke-width="4" />
-      <line x1="50" y1="35" x2="70" y2="20" stroke="#fff" stroke-width="4" />
-      <!-- Legs -->
-      <line x1="50" y1="60" x2="40" y2="80" stroke="#fff" stroke-width="4" />
-      <line x1="50" y1="60" x2="60" y2="80" stroke="#fff" stroke-width="4" />
-    </svg>
-  </div>
-
   <div id="history">
     <h2>📜 Track History</h2>
     <ul id="history-list"></ul>
@@ -201,9 +124,12 @@
       `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/2ilooPWs8TJhXrGz8vTfQg?utm_source=generator" width="100%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`,
       `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/3VFJnNGzvAKfNxhUWOuRGd?utm_source=generator" width="100%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`,
       `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/7szL7TYzUheUBzC4k8aspy?utm_source=generator" width="100%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`,
-      `<iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2028783856&color=%23ff5500&auto_play=false&visual=true"></iframe>`,
-      `<iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2056603348&color=%23ff5500&auto_play=false&visual=true"></iframe>`,
-      `<iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1981988347&color=%23ff5500&auto_play=false&visual=true"></iframe>`
+      `<iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay"
+        src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2028783856&color=%23ff5500&auto_play=false&visual=true"></iframe>`,
+      `<iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay"
+        src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2056603348&color=%23ff5500&auto_play=false&visual=true"></iframe>`,
+      `<iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay"
+        src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1981988347&color=%23ff5500&auto_play=false&visual=true"></iframe>`
     ];
 
     const today = new Date();
@@ -243,7 +169,8 @@
       const minutes = Math.floor((diff / (1000 * 60)) % 60);
       const seconds = Math.floor((diff / 1000) % 60);
 
-      document.getElementById('countdown').innerText = `⏳ Next track in ${hours}h ${minutes}m ${seconds}s`;
+      document.getElementById('countdown').innerText =
+        `⏳ Next track in ${hours}h ${minutes}m ${seconds}s`;
     }
 
     updateCountdown();
