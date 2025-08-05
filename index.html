@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Brano del Giorno</title>
+  <title>Track of the Day</title>
   <style>
-    /* Animazione sfondo */
+    /* Animated background */
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
@@ -13,11 +13,11 @@
       min-height: 100vh;
       background: linear-gradient(270deg, #1e1e2f, #2c3e50, #1e1e2f);
       background-size: 600% 600%;
-      animation: sfondoAnimato 20s ease infinite;
+      animation: animatedBackground 20s ease infinite;
       padding: 40px 20px;
     }
 
-    @keyframes sfondoAnimato {
+    @keyframes animatedBackground {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
@@ -32,7 +32,7 @@
       animation: fadeIn 2s ease-out;
     }
 
-    #titolo-giorno {
+    #daily-title {
       font-size: 1.2rem;
       font-weight: bold;
       margin-bottom: 10px;
@@ -74,7 +74,7 @@
       100% { opacity: 1; }
     }
 
-    #storico {
+    #history {
       margin-top: 60px;
       max-width: 800px;
       margin-left: auto;
@@ -85,18 +85,18 @@
       backdrop-filter: blur(10px);
     }
 
-    #storico h2 {
+    #history h2 {
       font-size: 1.6rem;
       margin-bottom: 15px;
       color: #ffcc70;
     }
 
-    #storico ul {
+    #history ul {
       list-style: none;
       padding: 0;
     }
 
-    #storico li {
+    #history li {
       margin-bottom: 20px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       padding-bottom: 10px;
@@ -104,19 +104,19 @@
   </style>
 </head>
 <body>
-  <h1>🎧 Brano del Giorno</h1>
-  <div id="titolo-giorno"></div>
-  <p>Ogni giorno un brano diverso tra quelli che seguiamo!</p>
+  <h1>🎧 Track of the Day</h1>
+  <div id="daily-title"></div>
+  <p>A different track every day from our favorite picks!</p>
   <div id="countdown"></div>
   <div id="player"></div>
 
-  <div id="storico">
-    <h2>📜 Storico Brani</h2>
-    <ul id="storico-lista"></ul>
+  <div id="history">
+    <h2>📜 Track History</h2>
+    <ul id="history-list"></ul>
   </div>
 
   <script>
-    const brani = [
+    const tracks = [
       `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/0z4uSSUsi67z8gujeAruL5?utm_source=generator" width="100%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`,
       `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/0HCJmL59iZGDRBaeZnOb9m?utm_source=generator" width="100%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`,
       `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/2RxGW6t9U1GZ25jUtNo41h?utm_source=generator" width="100%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`,
@@ -132,49 +132,49 @@
         src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1981988347&color=%23ff5500&auto_play=false&visual=true"></iframe>`
     ];
 
-    const oggi = new Date();
-    const giorno = oggi.getDate().toString().padStart(2, '0');
-    const mese = (oggi.getMonth() + 1).toString().padStart(2, '0');
-    const anno = oggi.getFullYear();
-    const dataChiave = `${anno}-${mese}-${giorno}`;
-    const hash = Array.from(dataChiave).reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    const index = hash % brani.length;
-    const branoDelGiorno = brani[index];
+    const today = new Date();
+    const day = today.getDate().toString().padStart(2, '0');
+    const month = (today.getMonth() + 1).toString().padStart(2, '0');
+    const year = today.getFullYear();
+    const dateKey = `${year}-${month}-${day}`;
+    const hash = Array.from(dateKey).reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const index = hash % tracks.length;
+    const trackOfTheDay = tracks[index];
 
-    document.getElementById('titolo-giorno').innerText = `Brano del Giorno – ${giorno} ${oggi.toLocaleString('it-IT', { month: 'long' })} ${anno}`;
-    document.getElementById('player').innerHTML = branoDelGiorno;
+    document.getElementById('daily-title').innerText = `Track of the Day – ${day} ${today.toLocaleString('en-US', { month: 'long' })} ${year}`;
+    document.getElementById('player').innerHTML = trackOfTheDay;
 
-    const storicoKey = 'storicoBrani';
-    const storico = JSON.parse(localStorage.getItem(storicoKey)) || [];
+    const historyKey = 'trackHistory';
+    const history = JSON.parse(localStorage.getItem(historyKey)) || [];
 
-    if (!storico.find(entry => entry.data === dataChiave)) {
-      storico.unshift({ data: dataChiave, index });
-      localStorage.setItem(storicoKey, JSON.stringify(storico));
+    if (!history.find(entry => entry.date === dateKey)) {
+      history.unshift({ date: dateKey, index });
+      localStorage.setItem(historyKey, JSON.stringify(history));
     }
 
-    const ul = document.getElementById('storico-lista');
-    storico.forEach(item => {
+    const ul = document.getElementById('history-list');
+    history.forEach(item => {
       const li = document.createElement('li');
-      li.innerHTML = `<strong>${item.data}</strong><br>${brani[item.index]}`;
+      li.innerHTML = `<strong>${item.date}</strong><br>${tracks[item.index]}`;
       ul.appendChild(li);
     });
 
-    function aggiornaCountdown() {
-      const oraCorrente = new Date();
-      const mezzanotte = new Date();
-      mezzanotte.setHours(24, 0, 0, 0);
-      const diff = mezzanotte - oraCorrente;
+    function updateCountdown() {
+      const now = new Date();
+      const midnight = new Date();
+      midnight.setHours(24, 0, 0, 0);
+      const diff = midnight - now;
 
-      const ore = Math.floor(diff / (1000 * 60 * 60));
-      const minuti = Math.floor((diff / (1000 * 60)) % 60);
-      const secondi = Math.floor((diff / 1000) % 60);
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
 
       document.getElementById('countdown').innerText =
-        `⏳ Prossimo brano tra ${ore}h ${minuti}m ${secondi}s`;
+        `⏳ Next track in ${hours}h ${minutes}m ${seconds}s`;
     }
 
-    aggiornaCountdown();
-    setInterval(aggiornaCountdown, 1000);
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
   </script>
 </body>
 </html>
