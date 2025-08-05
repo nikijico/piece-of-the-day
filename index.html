@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Brano del Giorno</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; padding: 40px; }
+    iframe { border: none; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>🎧 Brano del Giorno</h1>
+  <p>Ogni giorno un brano diverso tra quelli che seguiamo!</p>
+  <div id="player"></div>
+
+  <script>
+    // Lista di embed Spotify / YouTube / SoundCloud (puoi aggiungere i tuoi)
+    const brani = [
+      `<iframe src="https://open.spotify.com/embed/track/3n3Ppam7vgaVa1iaRUc9Lp" width="300" height="80" allow="encrypted-media"></iframe>`,
+      `<iframe width="300" height="80" src="https://www.youtube.com/embed/dQw4w9WgXcQ" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`,
+      `<iframe width="300" height="80" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/293&color=%23ff5500"></iframe>`
+    ];
+
+    // Seleziona un brano random
+    const randomIndex = Math.floor(Math.random() * brani.length);
+
+    // Inserisci nel div player
+    document.getElementById('player').innerHTML = brani[randomIndex];
+  </script>
+</body>
+</html>
