@@ -6,26 +6,90 @@
   <style>
     body { font-family: Arial, sans-serif; text-align: center; padding: 40px; }
     iframe { border: none; margin-top: 20px; }
+    #titolo-giorno { font-size: 20px; margin-top: 10px; font-weight: bold; }
+    #countdown { margin-top: 10px; font-size: 16px; color: gray; }
+    #storico { margin-top: 40px; text-align: left; max-width: 600px; margin-left: auto; margin-right: auto; }
+    #storico h2 { text-align: center; }
+    #storico ul { padding-left: 20px; }
   </style>
 </head>
 <body>
   <h1>🎧 Brano del Giorno</h1>
+  <div id="titolo-giorno"></div>
   <p>Ogni giorno un brano diverso tra quelli che seguiamo!</p>
+  <div id="countdown"></div>
   <div id="player"></div>
+  <div id="storico">
+    <h2>📜 Storico Brani</h2>
+    <ul id="storico-lista"></ul>
+  </div>
 
   <script>
-    // Lista di embed Spotify / YouTube / SoundCloud (puoi aggiungere i tuoi)
     const brani = [
-      `<iframe src="https://open.spotify.com/embed/track/3n3Ppam7vgaVa1iaRUc9Lp" width="300" height="80" allow="encrypted-media"></iframe>`,
-      `<iframe width="300" height="80" src="https://www.youtube.com/embed/dQw4w9WgXcQ" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`,
-      `<iframe width="300" height="80" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/293&color=%23ff5500"></iframe>`
+      `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/0z4uSSUsi67z8gujeAruL5?utm_source=generator" width="100%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`,
+      `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/0HCJmL59iZGDRBaeZnOb9m?utm_source=generator" width="100%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`,
+      `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/2RxGW6t9U1GZ25jUtNo41h?utm_source=generator" width="100%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`,
+      `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/7EmXXvYMi58iXOx1LhRidC?utm_source=generator" width="100%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`,
+      `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/2ilooPWs8TJhXrGz8vTfQg?utm_source=generator" width="100%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`,
+      `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/3VFJnNGzvAKfNxhUWOuRGd?utm_source=generator" width="100%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`,
+      `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/7szL7TYzUheUBzC4k8aspy?utm_source=generator" width="100%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`,
+      `<iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay"
+        src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2028783856&color=%23ff5500&auto_play=false&visual=true"></iframe>`,
+      `<iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay"
+        src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2056603348&color=%23ff5500&auto_play=false&visual=true"></iframe>`,
+      `<iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay"
+        src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1981988347&color=%23ff5500&auto_play=false&visual=true"></iframe>`
     ];
 
-    // Seleziona un brano random
-    const randomIndex = Math.floor(Math.random() * brani.length);
+    // === Calcolo brano del giorno ===
+    const oggi = new Date();
+    const giorno = oggi.getDate().toString().padStart(2, '0');
+    const mese = (oggi.getMonth() + 1).toString().padStart(2, '0');
+    const anno = oggi.getFullYear();
+    const dataChiave = `${anno}-${mese}-${giorno}`;
+    const hash = Array.from(dataChiave).reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const index = hash % brani.length;
+    const branoDelGiorno = brani[index];
 
-    // Inserisci nel div player
-    document.getElementById('player').innerHTML = brani[randomIndex];
+    // Mostra titolo e player
+    document.getElementById('titolo-giorno').innerText = `Brano del Giorno – ${giorno} ${oggi.toLocaleString('it-IT', { month: 'long' })} ${anno}`;
+    document.getElementById('player').innerHTML = branoDelGiorno;
+
+    // === Storico (localStorage) ===
+    const storicoKey = 'storicoBrani';
+    const storico = JSON.parse(localStorage.getItem(storicoKey)) || [];
+
+    // Aggiunge all'inizio se non già salvato per oggi
+    if (!storico.find(entry => entry.data === dataChiave)) {
+      storico.unshift({ data: dataChiave, index });
+      localStorage.setItem(storicoKey, JSON.stringify(storico));
+    }
+
+    // Mostra storico
+    const ul = document.getElementById('storico-lista');
+    storico.forEach(item => {
+      const li = document.createElement('li');
+      li.innerHTML = `${item.data} &nbsp; ${brani[item.index]}`;
+      ul.appendChild(li);
+    });
+
+    // === Countdown fino a mezzanotte ===
+    function aggiornaCountdown() {
+      const oraCorrente = new Date();
+      const mezzanotte = new Date();
+      mezzanotte.setHours(24, 0, 0, 0); // oggi alle 24:00
+      const diff = mezzanotte - oraCorrente;
+
+      const ore = Math.floor(diff / (1000 * 60 * 60));
+      const minuti = Math.floor((diff / (1000 * 60)) % 60);
+      const secondi = Math.floor((diff / 1000) % 60);
+
+      document.getElementById('countdown').innerText =
+        `⏳ Prossimo brano tra ${ore}h ${minuti}m ${secondi}s`;
+    }
+
+    aggiornaCountdown();
+    setInterval(aggiornaCountdown, 1000); // aggiorna ogni secondo
   </script>
 </body>
 </html>
